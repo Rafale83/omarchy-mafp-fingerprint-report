@@ -18,7 +18,12 @@ Supporting material for a bug report against [omacom/omarchy](https://github.com
 | `tools/usbwatch.sh` | USB hotplug watcher that flags any device against that ID list |
 | `workaround/pam-fprint.sh` | What the wizard would have done: the exact PAM stanzas for sudo, polkit and the lock screen, applied by hand after `fprintd-enroll` / `fprintd-verify` |
 
-## Filing it
+## Status
+
+- Issue: https://github.com/omacom/omarchy/issues/11426
+- Pull request: https://github.com/omacom/omarchy/pull/11427 (from fork `Rafale83/omarchy`, branch `fix/hw-fingerprint-microarray`)
+
+## Filing it (already done — kept for reference)
 
 ```bash
 # 1. Issue
