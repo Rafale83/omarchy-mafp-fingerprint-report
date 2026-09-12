@@ -4,6 +4,6 @@
   "review_decision": "",
   "issue_state": "OPEN",
   "seen_ids": [],
-  "last_checked": "2026-09-12T08:44:16Z",
-  "note": "ÉCHEC du passage du 2026-09-12T08:46:36Z : accès à omacom/omarchy (API et web) refusé par la sandbox de la session (dépôt d'un autre propriétaire, non attachable en v1 aux côtés de rafale83/*). Seul le clone git anonyme fonctionne, insuffisant pour lire issues/PR/commentaires. État ci-dessus non vérifié depuis 2026-09-12T08:44:16Z."
+  "last_checked": "2026-09-12T08:49:09Z",
+  "note": "État mémorisé entre deux passages de la routine cloud de veille ; mis à jour automatiquement."
 }
