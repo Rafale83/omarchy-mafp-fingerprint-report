@@ -1,0 +1,13 @@
+ok - an FPC reader is detected by its product string
+ok - a generic 10a5 USB device is not detected
+ok - an FPC reader is detected by its sensor-controller string
+ok - an FPC token mid-string is not detected
+ok - a reader is detected by an existing product-name match
+ok - a reader is detected by an existing vendor match
+ok - a Microarray reader is detected by its vendor
+ok - a reader is detected by the MAFP product token
+ok - a vendor guess bound to a kernel driver is rejected
+ok - a vendor guess claimed through usbfs is still detected
+ok - a real driver alongside a usbfs claim is still rejected
+ok - a self-named reader is detected with a driver bound
+ok - a machine with no matching USB devices detects nothing

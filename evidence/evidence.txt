@@ -1,0 +1,42 @@
+$ lsusb | grep 3274
+Bus 003 Device 008: ID 3274:8012 MicroarrayTechnology MAFP General Device 
+
+$ cat /sys/bus/usb/devices/3-*/{idVendor,idProduct,manufacturer,product}  (device 3274)
+idVendor=3274 idProduct=8012
+manufacturer=[MicroarrayTechnology]
+product=[MAFP General Device ]
+
+$ omarchy-hw-fingerprint; echo $?
+1
+
+$ omarchy-setup-security-fingerprint  (first lines, bails on detection)
+Setting up fingerprint scanner for authentication.
+
+No fingerprint sensor detected.
+(exit 1)
+
+$ fprintd-list $USER
+found 1 devices
+Device at /net/reactivated/Fprint/Device/0
+Using device /net/reactivated/Fprint/Device/0
+Fingerprints for user USER on MAFP MOC Fingerprint Sensor (press):
+ - #0: right-index-finger
+
+$ fprintd-verify -f right-index-finger $USER
+Verify result: verify-match (done)   # captured earlier this session
+
+$ journalctl -k | grep "usb 3-2"  (serial redacted)
+Sep 12 09:43:11 HOST kernel: usb 3-2: New USB device found, idVendor=3274, idProduct=8012, bcdDevice= 1.00
+Sep 12 09:43:11 HOST kernel: usb 3-2: Product: MAFP General Device 
+Sep 12 09:43:11 HOST kernel: usb 3-2: Manufacturer: MicroarrayTechnology
+Sep 12 09:43:11 HOST kernel: usb 3-2: SerialNumber: <redacted>
+
+$ pacman -Q libfprint fprintd; omarchy version; uname -r
+libfprint 1.94.100-1
+fprintd 1.94.5-2
+4.0.2-1
+7.1.9-arch1-2
+
+# libfprint metainfo lists the device:
+3274:8012
+usb:v3274p8012*  -> driver mafpmoc ("MAFP MOC Fingerprint Sensor")

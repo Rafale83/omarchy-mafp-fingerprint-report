@@ -1,0 +1,71 @@
+From 40843ba253b481d5b79e42f50d0f0600e3bdeb9a Mon Sep 17 00:00:00 2001
+From: Rafael Pinilla <rafaelpinilla001@gmail.com>
+Date: Sat, 12 Sep 2026 10:07:40 +0200
+Subject: [PATCH] Detect Microarray MAFP fingerprint readers
+
+Microarray's MAFP match-on-chip readers (USB vendor 3274, driven by
+libfprint's mafpmoc) enumerate as "MAFP General Device": no
+"fingerprint" in the product string and a vendor missing from the
+list, so omarchy-hw-fingerprint returned false and
+omarchy-setup-security-fingerprint refused to run on a reader fprintd
+handles fine. Add the vendor and the MAFP product token, with a test
+for each path.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01WJZgHbukBfk6NyncUQFYt1
+---
+ bin/omarchy-hw-fingerprint          | 10 +++++++---
+ test/shell.d/hw-fingerprint-test.sh |  9 +++++++++
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/bin/omarchy-hw-fingerprint b/bin/omarchy-hw-fingerprint
+index cdaf040..c25553e 100755
+--- a/bin/omarchy-hw-fingerprint
++++ b/bin/omarchy-hw-fingerprint
+@@ -8,7 +8,10 @@
+ # ship fingerprint readers; multi-purpose vendors (e.g. Elan/STMicro, which
+ # also make USB touchscreens) are left out to avoid nagging laptops with no
+ # reader — those still match on the product string below when present.
+-fingerprint_vendors=" 27c6 138a 06cb 08ff 1c7a 147e "
++# 3274 is Microarray Technology, whose MAFP match-on-chip readers libfprint
++# drives (mafpmoc); they enumerate as "MAFP General Device" with no
++# "fingerprint" in the string, so the vendor guess is what catches them.
++fingerprint_vendors=" 27c6 138a 06cb 08ff 1c7a 147e 3274 "
+ usb_devices_path="${OMARCHY_USB_DEVICES_PATH:-/sys/bus/usb/devices}"
+ 
+ # libfprint drives every reader it supports from userspace over libusb, so a
+@@ -42,8 +45,9 @@ for dev in "$usb_devices_path"/*; do
+     # the manufacturer rather than the function. Both vendors are left out of
+     # the list above on purpose (Elan also makes touchscreens), so without these
+     # they match nothing. FPC leads the string on every reader on record, and
+-    # three letters are little to match on, so require the prefix.
+-    [[ $product == *fingerprint* || $product == *biometric* || $product == *elan:arm-m4* || $product == "fpc "* ]] && exit 0
++    # three letters are little to match on, so require the prefix. Microarray
++    # readers say "MAFP General Device" — MAFP is MicroArray FingerPrint.
++    [[ $product == *fingerprint* || $product == *biometric* || $product == *elan:arm-m4* || $product == "fpc "* || $product == *mafp* ]] && exit 0
+   fi
+ 
+   if [[ -r $dev/idVendor ]]; then
+diff --git a/test/shell.d/hw-fingerprint-test.sh b/test/shell.d/hw-fingerprint-test.sh
+index 6ae30a2..54ed598 100755
+--- a/test/shell.d/hw-fingerprint-test.sh
++++ b/test/shell.d/hw-fingerprint-test.sh
+@@ -74,6 +74,15 @@ assert_detects "a reader is detected by an existing product-name match"
+ write_usb_devices '27c6:1234'
+ assert_detects "a reader is detected by an existing vendor match"
+ 
++# Microarray's MAFP readers enumerate as "MAFP General Device" — no
++# "fingerprint" in the string — so both the vendor guess and an MAFP token
++# have to catch them. Each is exercised on its own.
++write_usb_devices '3274:8012'
++assert_detects "a Microarray reader is detected by its vendor"
++
++write_usb_devices '1234:5678:MAFP General Device'
++assert_detects "a reader is detected by the MAFP product token"
++
+ bind_driver() {
+   local dev="$1" driver="$2"
+ 
+-- 
+2.55.0
+
