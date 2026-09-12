@@ -1,6 +1,6 @@
 # Omarchy: Microarray MAFP fingerprint reader not detected
 
-Supporting material for a bug report against [basecamp/omarchy](https://github.com/basecamp/omarchy): `omarchy-hw-fingerprint` misses Microarray "MAFP" USB readers (`3274:8012`), so the fingerprint setup wizard refuses to run on a reader that libfprint/fprintd support out of the box.
+Supporting material for a bug report against [omacom/omarchy](https://github.com/omacom/omarchy): `omarchy-hw-fingerprint` misses Microarray "MAFP" USB readers (`3274:8012`), so the fingerprint setup wizard refuses to run on a reader that libfprint/fprintd support out of the box.
 
 *Dossier de support pour un rapport de bug Omarchy : le détecteur `omarchy-hw-fingerprint` ignore les lecteurs Microarray MAFP (`3274:8012`), donc l'assistant d'empreintes refuse de se lancer alors que libfprint/fprintd gèrent ce capteur nativement.*
 

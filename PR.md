@@ -4,7 +4,7 @@ This adds the vendor to the guess list and an `mafp` token to the product-string
 
 Tested on ASUS ProArt P16 / Omarchy 4.0.2-1 with the reader attached: detection passes, and the wizard's PAM stacks for sudo, polkit and the lock screen work end to end.
 
-Fixes #<issue-number>
+Fixes #11426
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
